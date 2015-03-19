@@ -92,3 +92,31 @@ rankhospital <- function(state, outcome, num = "best") {
 	
 	hospName
 }
+
+
+makeCacheMatrix <- function(x = matrix()) {
+        Matrix <- NULL
+        setMatrix <- function(y) {
+                x <<- y
+                Matrix <<- NULL
+        }
+        getMatrix <- function() x
+        setInvMatrix <- function(InvMatrix) Matrix <<- InvMatrix
+        getInvMatrix <- function() Matrix
+        list(setMatrix = setMatrix,
+		 getMatrix = getMatrix, 
+             setInvMatrix = setInvMatrix,
+             getInvMatrix = getInvMatrix)
+}
+
+cacheSolve <- function(x, ...) {
+        InvMatrix <- x$getInvMatrix()
+        if(!is.null(InvMatrix )) {
+                message("getting cached data")
+                return(InvMatrix)
+        }
+        Matrix <- x$getMatrix()
+        InvMatrix  <- solve(Matrix)
+        x$setInvMatrix(InvMatrix)
+        InvMatrix
+}
